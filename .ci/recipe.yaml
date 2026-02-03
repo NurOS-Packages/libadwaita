@@ -18,9 +18,11 @@ source:
   url: "https://gitlab.gnome.org/GNOME/libadwaita/-/archive/{{VERSION}}/libadwaita-{{VERSION}}.tar.gz"
 
 build:
-  dependencies: ["python3-pip", "ninja-build", "libgtk4-dev", "libglib2.0-dev", "libfribidi-dev", "libpango1.0-dev", "libcairo2-dev", "gobject-introspection", "libgirepository1.0-dev"]
+  dependencies: ["python3-pip", "ninja-build", "pkg-config", "libgtk4-dev", "libglib2.0-dev", "libfribidi-dev", "libpango1.0-dev", "libcairo2-dev", "gobject-introspection", "libgirepository1.0-dev"]
   script: |
     pip3 install meson --break-system-packages
+    export PATH=$PATH:/usr/bin
+    which glib-compile-resources || dpkg -L libglib2.0-dev | grep compile-resources
     meson setup _build \
       -Dprefix=/usr \
       -Dtests=false \
