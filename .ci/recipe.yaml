@@ -1,27 +1,32 @@
-# APGer Recipe Template for NurOS Packages
-# Edit this file to define your package build configuration
-
 package:
-  name: "package-name"           # Package name (required)
-  version: "1.0.0"               # Package version (required)
-  type: "binary"                 # Type: binary, meta, library (required)
-  architecture: "x86_64"         # Architecture: x86_64, aarch64, any (required)
-  description: "Package description" # Short description (required)
-  maintainer: "Your Name <email@example.com>" # Maintainer info (required)
-  license: "GPL-3.0"             # License identifier (required)
-  homepage: "https://example.com" # Project homepage (optional)
-  tags: ["tag1", "tag2"]         # Tags for categorization (optional)
-  dependencies: []               # Runtime dependencies (optional)
-  conflicts: []                  # Conflicting packages (optional)
-  provides: []                   # Virtual packages provided (optional)
-  replaces: []                   # Packages replaced by this one (optional)
-  conf: []                       # Configuration files paths (optional)
+  name: "libadwaita"
+  version: "1.7.7"
+  type: "binary"
+  architecture: "x86_64"
+  description: "Building blocks for modern GNOME applications"
+  maintainer: "APGer <anmitali198@gmail.com>"
+  license: "LGPL-2.1"
+  homepage: "https://gitlab.gnome.org/GNOME/libadwaita"
+  tags: ["gnome", "gtk4", "library", "ui", "adwaita"]
+  dependencies: ["gtk4", "glib", "fribidi", "pango", "cairo"]
+  conflicts: []
+  provides: []
+  replaces: []
+  conf: []
 
 source:
-  url: "https://example.com/source.tar.xz" # Source archive URL (required)
+  url: "https://gitlab.gnome.org/GNOME/libadwaita/-/archive/{{VERSION}}/libadwaita-{{VERSION}}.tar.gz"
 
 build:
-  script: "./configure --prefix=/usr && make" # Build commands (required)
+  dependencies: ["meson", "ninja-build", "libgtk4-dev", "libglib2.0-dev", "libfribidi-dev", "libpango1.0-dev", "libcairo2-dev", "gobject-introspection", "libgirepository1.0-dev"]
+  script: |
+    meson setup _build \
+      -Dprefix=/usr \
+      -Dtests=false \
+      -Dexamples=false \
+      -Dintrospection=enabled \
+      -Dvapi=false
+    ninja -C _build
 
 install:
-  script: "make DESTDIR=\"$DESTDIR\" install" # Install commands to $DESTDIR (required)
+  script: "ninja -C _build install"
