@@ -1,6 +1,6 @@
 package:
   name: "libadwaita"
-  version: "1.7.7"
+  version: "1.6.9"
   type: "binary"
   architecture: "x86_64"
   description: "Building blocks for modern GNOME applications"
@@ -18,7 +18,7 @@ source:
   url: "https://gitlab.gnome.org/GNOME/libadwaita/-/archive/{{VERSION}}/libadwaita-{{VERSION}}.tar.gz"
 
 build:
-  dependencies: ["python3-pip", "ninja-build", "pkg-config", "libgtk4-dev", "libglib2.0-dev", "libfribidi-dev", "libpango1.0-dev", "libcairo2-dev", "gobject-introspection", "libgirepository1.0-dev"]
+  dependencies: ["python3-pip", "ninja-build", "pkg-config", "libgtk-4-dev", "libglib2.0-dev", "libfribidi-dev", "libpango1.0-dev", "libcairo2-dev", "gobject-introspection", "libgirepository1.0-dev"]
   script: |
     pip3 install meson --break-system-packages
     export PATH=$PATH:/usr/bin
