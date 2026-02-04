@@ -19,8 +19,8 @@ source:
 
 build:
   dependencies: 
-    - "python3-pip"
-    - "ninja-build" 
+    - "meson"
+    - "ninja-build"
     - "pkg-config"
     - "libgtk-4-dev"
     - "libglib2.0-dev"
@@ -29,26 +29,7 @@ build:
     - "libcairo2-dev"
     - "gobject-introspection"
     - "libgirepository1.0-dev"
-    - "meson"  
   script: |
-    export PATH=/usr/bin:$PATH
-    which meson
-    meson --version
-    
-    GLIB_VERSION=$(pkg-config --modversion glib-2.0)
-    if dpkg --compare-versions "$GLIB_VERSION" lt "2.84"; then
-      echo "Building glib 2.84..."
-      cd /tmp
-      wget https://download.gnome.org/sources/glib/2.84/glib-2.84.0.tar.xz
-      tar -xf glib-2.84.0.tar.xz
-      cd glib-2.84.0
-      meson setup _build --prefix=/usr -Dtests=false
-      ninja -C _build
-      sudo ninja -C _build install
-      sudo ldconfig
-      cd -
-    fi
-    
     meson setup _build \
       -Dprefix=/usr \
       -Dtests=false \
@@ -56,3 +37,6 @@ build:
       -Dintrospection=enabled \
       -Dvapi=false
     ninja -C _build
+
+install:
+  script: "ninja -C _build install"
